@@ -29,6 +29,10 @@ internal class Program
             {
                 Git.HashObject(args.Slice(1));
             } break;
+            case ["ls-tree", ..]:
+            {
+                Git.LsTree(args.Slice(1));
+            } break;
             default:
             {
                 throw new ArgumentException($"Unknown command {command}");
