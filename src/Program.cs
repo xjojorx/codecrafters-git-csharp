@@ -14,7 +14,7 @@ internal class Program
         }
 
         // You can use print statements as follows for debugging, they'll be visible when running tests.
-        Console.Error.WriteLine("Logs from your program will appear here!");
+        // Console.Error.WriteLine("Logs from your program will appear here!");
 
         string command = args[0];
         switch(args) {
@@ -24,6 +24,10 @@ internal class Program
             case ["cat-file",  ..]:
             {
                 Git.CatFile(args.Slice(1));
+            } break;
+            case ["hash-object", ..]:
+            {
+                Git.HashObject(args.Slice(1));
             } break;
             default:
             {
@@ -40,4 +44,8 @@ public static class Extensions {
     public static Span<T> Slice<T>(this T[] array, int start, int length) 
         => new Span<T>(array, start, length);
 
+    public static ReadOnlySpan<char> Slice(this string str, int start) 
+        => str.AsSpan(start);
+    public static ReadOnlySpan<char> Slice(this string str, int start, int length) 
+        => str.AsSpan(start, length);
 }
