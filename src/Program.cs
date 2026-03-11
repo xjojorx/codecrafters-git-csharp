@@ -17,39 +17,51 @@ internal class Program
         // Console.Error.WriteLine("Logs from your program will appear here!");
 
         string command = args[0];
-        switch(args) {
-            case ["init", ..]:{
-                Git.Init();
-            } break;
-            case ["cat-file",  ..]:
-            {
-                Git.CatFile(args.Slice(1));
-            } break;
+        switch (args)
+        {
+            case ["init", ..]:
+                {
+                    Git.Init();
+                }
+                break;
+            case ["cat-file", ..]:
+                {
+                    Git.CatFile(args.Slice(1));
+                }
+                break;
             case ["hash-object", ..]:
-            {
-                Git.HashObject(args.Slice(1));
-            } break;
+                {
+                    Git.HashObject(args.Slice(1));
+                }
+                break;
             case ["ls-tree", ..]:
-            {
-                Git.LsTree(args.Slice(1));
-            } break;
+                {
+                    Git.LsTree(args.Slice(1));
+                }
+                break;
+            case ["write-tree", ..]:
+                {
+                    Git.WriteTree();
+                }
+                break;
             default:
-            {
-                throw new ArgumentException($"Unknown command {command}");
-            }
+                {
+                    throw new ArgumentException($"Unknown command {command}");
+                }
 
         }
     }
 }
 
-public static class Extensions {
-    public static Span<T> Slice<T>(this T[] array, int start) 
+public static class Extensions
+{
+    public static Span<T> Slice<T>(this T[] array, int start)
     => new Span<T>(array, start, array.Length - start);
-    public static Span<T> Slice<T>(this T[] array, int start, int length) 
+    public static Span<T> Slice<T>(this T[] array, int start, int length)
         => new Span<T>(array, start, length);
 
-    public static ReadOnlySpan<char> Slice(this string str, int start) 
+    public static ReadOnlySpan<char> Slice(this string str, int start)
         => str.AsSpan(start);
-    public static ReadOnlySpan<char> Slice(this string str, int start, int length) 
+    public static ReadOnlySpan<char> Slice(this string str, int start, int length)
         => str.AsSpan(start, length);
 }
