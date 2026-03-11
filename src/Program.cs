@@ -44,6 +44,11 @@ internal class Program
                     Git.WriteTree();
                 }
                 break;
+            case ["commit-tree", ..]:
+                {
+                    Git.CommitTree(args.Slice(1));
+                }
+                break;
             default:
                 {
                     throw new ArgumentException($"Unknown command {command}");

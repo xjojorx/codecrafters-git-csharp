@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
@@ -170,6 +171,43 @@ public static class Git
 
         byte[] treeHash = HashTree(entries);
         return treeHash;
+    }
+
+    public static void CommitTree(ReadOnlySpan<string> args)
+    {
+        //NOTE: this almost requires a better argument parser
+        string treeHash = args[0];
+        string parentHash = args[2];
+        string message = args[4];
+
+        string gitName = "John Doe";
+        string gitEmail = "john@example.com";
+        string dateStr = "1234567890 +0000";
+
+        var sb = new StringBuilder();
+        sb.AppendLine($"tree {treeHash}");
+        sb.AppendLine($"parent {parentHash}");
+        sb.AppendLine($"author {gitName} <{gitEmail}> {dateStr}");
+        sb.AppendLine($"committer {gitName} <{gitEmail}> {dateStr}");
+        sb.AppendLine();
+        sb.AppendLine(message);
+        var bodyStr = sb.ToString();
+
+        byte[] content;
+        using (var sink = new MemoryStream())
+        {
+            var body = Encoding.UTF8.GetBytes(bodyStr);
+            sink.Write(Encoding.UTF8.GetBytes($"commit {body.Length}"));
+            sink.WriteByte(0);
+            sink.Write(body);
+            content = sink.ToArray();
+        }
+
+        byte[] hash = SHA1.HashData(content);
+        string hashStr = Convert.ToHexStringLower(hash);
+        WriteObject(hashStr, content);
+
+        Console.WriteLine(hashStr);
     }
 
 
